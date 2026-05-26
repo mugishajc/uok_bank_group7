@@ -7,3 +7,4 @@ manifest.txt
 .DS_Store
 .idea/
 *.iml
+.claude/

@@ -81,53 +81,73 @@ loans        (id, phone, amount, status, requested_at)
 
 ---
 
-## Quick Start — Run the JAR
+## Local Setup — Clone & Run
 
-**Prerequisites:** Java 17 or later ([adoptium.net](https://adoptium.net/))
+### Prerequisites
+
+| Tool | Version | Download |
+|------|---------|----------|
+| Git  | any     | [git-scm.com](https://git-scm.com/) |
+| Java | 17 +    | [adoptium.net](https://adoptium.net/) |
+
+### Step 1 — Clone the repository
+
+```bash
+git clone https://github.com/mugishajc/uok_bank_group7.git
+cd uok_bank_group7/BankingSimulator
+```
+
+### Step 2 — Run immediately (no build needed)
+
+The repository contains the compiled `UoKBank.jar`. Launch it directly:
 
 ```bash
 # macOS / Linux
-java -version          # verify Java 17+
-./UoKBank.sh           # wrapper script (or run directly below)
 java -jar UoKBank.jar
+# or use the provided launcher script
+chmod +x UoKBank.sh && ./UoKBank.sh
 
 # Windows
-UoKBank.bat            # checks Java and launches JAR
+UoKBank.bat
 ```
 
-The database is created at `~/.uokbank/uok_bank.db` on first launch. No setup wizard, no SQL server, no environment variables.
+The SQLite database is created automatically at `~/.uokbank/uok_bank.db` on first launch.  
+No installation wizard, no SQL server, no environment variables.
 
-### Default Admin Account
+### Step 3 — Verify it works
+
+Log in with the default admin account:
 
 | Field | Value |
 |-------|-------|
 | Phone | `0700000000` |
 | PIN   | `00000` |
 
----
-
-## Build from Source
+### Step 4 — Run the test suite (optional)
 
 ```bash
-# 1. Clone / open the project
-cd BankingSimulator/
+chmod +x run_tests.sh && ./run_tests.sh
+# Expected: OK (69 tests)
+```
 
-# 2. Compile
+### Step 5 — Rebuild the JAR after code changes (optional)
+
+```bash
 find src -name "*.java" > sources.txt
 mkdir -p out
 javac -cp lib/sqlite-jdbc.jar -d out @sources.txt
 
-# 3. Package fat JAR (sqlite-jdbc classes merged in)
 mkdir -p fat
 cd fat && jar xf ../lib/sqlite-jdbc.jar && cd ..
 cp -r out/* fat/
 jar cfm UoKBank.jar manifest.txt -C fat .
 
-# 4. Run
 java -jar UoKBank.jar
 ```
 
-### IntelliJ IDEA Setup
+---
+
+### IntelliJ IDEA (alternative to JAR)
 
 1. **File → Open** → select `BankingSimulator/`
 2. Right-click `src/` → **Mark Directory as → Sources Root**
