@@ -1,0 +1,9 @@
+out/
+fat/
+data/
+sources.txt
+manifest.txt
+*.class
+.DS_Store
+.idea/
+*.iml

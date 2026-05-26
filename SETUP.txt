@@ -1,0 +1,102 @@
+===================================================================
+  UoK Bank — Banking & Mobile Money Simulator
+  Advanced Computer Programming with Java — Dr. Josbert Nteziriza
+  University of Kigali  |  Group Assignment  |  May 2026
+===================================================================
+
+TECHNOLOGY STACK
+-----------------
+  Language   : Java 17+
+  UI         : Java Swing (no external UI library)
+  Database   : SQLite (via sqlite-jdbc driver)
+  Build      : IntelliJ IDEA (no Maven/Gradle needed)
+
+FEATURES
+---------
+  1. Multi-account system — phone number + 5-digit PIN login
+  2. Account types: MoMo Wallet, Savings, Current
+  3. Deposit / Withdraw with PIN confirmation
+  4. MoMo-style P2P Transfer (verify receiver before sending)
+  5. Agent Cash-In / Cash-Out
+  6. Loan request → Admin approval → Disbursement → Repayment
+  7. Full transaction history with colour-coded types
+  8. Admin dashboard: accounts, loans, all transactions
+
+DEFAULT ADMIN LOGIN
+--------------------
+  Phone : 0700000000
+  PIN   : 00000
+
+SETUP IN INTELLIJ IDEA
+-----------------------
+  Step 1: Download the SQLite JDBC driver JAR
+          -> Search: "sqlite-jdbc maven" -> download latest sqlite-jdbc-X.X.X.jar
+          -> OR get from: https://github.com/xerial/sqlite-jdbc/releases
+          -> Save it to:  BankingSimulator/lib/
+
+  Step 2: Open IntelliJ IDEA
+          -> File > Open > select the BankingSimulator/ folder
+
+  Step 3: Mark src/ as Sources Root
+          -> Right-click src/ folder > Mark Directory as > Sources Root
+
+  Step 4: Add the JDBC library
+          -> File > Project Structure (Ctrl+Alt+Shift+S)
+          -> Modules > Dependencies tab > + (plus) > JARs or Directories
+          -> Navigate to lib/sqlite-jdbc-X.X.X.jar > OK > Apply
+
+  Step 5: Set Run Configuration
+          -> Run > Edit Configurations > + > Application
+          -> Main class: Main
+          -> Working directory: [path to BankingSimulator/]   <-- IMPORTANT
+          -> Apply > OK
+
+  Step 6: Run with Shift+F10 or the green play button
+
+NOTE: The SQLite database file (data/uok_bank.db) is created
+      automatically the first time you run the app.
+      The admin account is also seeded automatically.
+
+PROJECT STRUCTURE
+------------------
+  src/
+    Main.java                   -- entry point
+    model/
+      Account.java              -- account entity
+      Transaction.java          -- transaction entity
+      Loan.java                 -- loan entity
+    storage/
+      DatabaseConnection.java   -- SQLite connection
+      DatabaseInitializer.java  -- creates tables, seeds admin
+    dao/
+      AccountDAO.java           -- account DB operations
+      TransactionDAO.java       -- transaction DB operations
+      LoanDAO.java              -- loan DB operations
+    ui/
+      UITheme.java              -- shared colours, fonts, buttons
+      LoginFrame.java           -- login screen
+      RegisterFrame.java        -- account registration
+      DashboardFrame.java       -- main dashboard with balance card
+      DepositFrame.java         -- deposit money
+      WithdrawFrame.java        -- withdraw with PIN
+      TransferFrame.java        -- P2P transfer (MoMo style)
+      HistoryFrame.java         -- transaction history table
+      LoanFrame.java            -- request & repay loans
+      AgentFrame.java           -- agent cash-in / cash-out
+      AdminFrame.java           -- admin: accounts, loans, transactions
+  lib/
+    sqlite-jdbc-X.X.X.jar       -- place downloaded JAR here
+  data/
+    uok_bank.db                 -- created automatically at runtime
+
+TEAM MEMBER CONTRIBUTIONS (suggested split)
+---------------------------------------------
+  Member 1: DatabaseConnection, DatabaseInitializer, AccountDAO
+  Member 2: TransactionDAO, LoanDAO, model classes
+  Member 3: LoginFrame, RegisterFrame, DashboardFrame, UITheme
+  Member 4: All operation frames (Deposit, Withdraw, Transfer,
+            History, Loan, Agent, Admin)
+
+===================================================================
+  For educational purposes only — University of Kigali, 2026
+===================================================================
