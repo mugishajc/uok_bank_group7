@@ -27,6 +27,7 @@ public class WithdrawFrame extends JFrame {
         setTitle("Withdraw — UoK Bank");
         setSize(420, 420);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setIconImage(UITheme.appIcon());
         setLocationRelativeTo(null);
         setResizable(false);
         build();

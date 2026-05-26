@@ -29,6 +29,7 @@ public class AdminFrame extends JFrame {
         setTitle("Admin Dashboard — UoK Bank");
         setSize(880, 620);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setIconImage(UITheme.appIcon());
         setLocationRelativeTo(null);
         build();
         setVisible(true);
@@ -85,6 +86,7 @@ public class AdminFrame extends JFrame {
         tabs.addTab("  Loans     ",  buildLoansTab());
         tabs.addTab("  All Transactions  ", buildTransactionsTab());
         add(tabs, BorderLayout.CENTER);
+        add(UITheme.footer(), BorderLayout.SOUTH);
     }
 
     // ── Accounts tab ──────────────────────────────────────────────────────────

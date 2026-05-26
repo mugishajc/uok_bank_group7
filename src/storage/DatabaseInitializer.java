@@ -6,7 +6,7 @@ import java.sql.*;
 public class DatabaseInitializer {
 
     public static void initialize() {
-        new File("data").mkdirs();
+        new File(DatabaseConnection.getDbDir()).mkdirs();
         createTables();
         seedAdmin();
     }

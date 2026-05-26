@@ -28,6 +28,7 @@ public class TransferFrame extends JFrame {
         setTitle("Transfer — UoK Bank");
         setSize(440, 520);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setIconImage(UITheme.appIcon());
         setLocationRelativeTo(null);
         setResizable(false);
         build();

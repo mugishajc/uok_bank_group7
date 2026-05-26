@@ -28,6 +28,7 @@ public class AgentFrame extends JFrame {
         setTitle("Agent Services — UoK Bank");
         setSize(460, 500);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setIconImage(UITheme.appIcon());
         setLocationRelativeTo(null);
         setResizable(false);
         build();

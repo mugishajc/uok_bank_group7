@@ -15,10 +15,11 @@ public class RegisterFrame extends JFrame {
 
     public RegisterFrame() {
         setTitle("UoK Bank — Open Account");
-        setSize(480, 580);
+        setSize(480, 600);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
+        setIconImage(UITheme.appIcon());
         build();
         setVisible(true);
     }
@@ -30,7 +31,6 @@ public class RegisterFrame extends JFrame {
         add(UITheme.pageHeader("Open New Account", "University of Kigali Banking Simulator"),
             BorderLayout.NORTH);
 
-        // ── Form card ─────────────────────────────────────────────────────────
         JPanel form = new JPanel(new GridBagLayout());
         form.setBackground(UITheme.CARD);
         form.setBorder(new EmptyBorder(28, 36, 28, 36));
@@ -41,22 +41,21 @@ public class RegisterFrame extends JFrame {
         g.weightx = 1.0;
 
         int row = 0;
-        row = addRow(form, g, row, "FULL NAME",    txtName    = UITheme.field());
-        row = addRow(form, g, row, "PHONE NUMBER", txtPhone   = UITheme.field());
-
+        row = addRow(form, g, row, "FULL NAME",      txtName    = UITheme.field());
+        row = addRow(form, g, row, "PHONE NUMBER",   txtPhone   = UITheme.field());
         cmbType = UITheme.combo("MoMo Wallet", "Savings Account", "Current Account");
-        row = addRow(form, g, row, "ACCOUNT TYPE", cmbType);
+        row = addRow(form, g, row, "ACCOUNT TYPE",   cmbType);
+        row = addRow(form, g, row, "PIN (5 digits)", txtPin     = UITheme.pinField());
+        row = addRow(form, g, row, "CONFIRM PIN",    txtConfirm = UITheme.pinField());
 
-        row = addRow(form, g, row, "PIN (5 digits)",     txtPin    = UITheme.pinField());
-        row = addRow(form, g, row, "CONFIRM PIN",  txtConfirm = UITheme.pinField());
-
-        g.gridy = row; g.gridx = 0; g.gridwidth = 2; g.insets = new Insets(18, 0, 6, 0);
-        JButton btnCreate = UITheme.successBtn("Create Account");
+        // Primary action = UoK navy blue
+        g.gridy = row; g.gridx = 0; g.gridwidth = 2; g.insets = new Insets(18, 0, 8, 0);
+        JButton btnCreate = UITheme.primaryBtn("Create Account");
         btnCreate.setPreferredSize(new Dimension(Short.MAX_VALUE, 44));
         btnCreate.addActionListener(e -> register());
         form.add(btnCreate, g);
 
-        g.gridy = row + 1; g.insets = new Insets(8, 0, 0, 0);
+        g.gridy = row + 1; g.insets = new Insets(0, 0, 0, 0);
         JButton btnBack = UITheme.grayBtn("Back to Login");
         btnBack.setPreferredSize(new Dimension(Short.MAX_VALUE, 40));
         btnBack.addActionListener(e -> { dispose(); new LoginFrame(); });
@@ -67,22 +66,12 @@ public class RegisterFrame extends JFrame {
         scroll.getViewport().setBackground(UITheme.CARD);
         add(scroll, BorderLayout.CENTER);
 
-        // ── Footer ────────────────────────────────────────────────────────────
-        JLabel footer = new JLabel(
-            "  Advanced Computer Programming — Dr. Josbert Nteziriza  |  UoK 2026",
-            SwingConstants.CENTER);
-        footer.setFont(UITheme.F_MICRO);
-        footer.setForeground(UITheme.TEXT_MUTED);
-        footer.setBorder(new EmptyBorder(6, 0, 6, 0));
-        footer.setBackground(UITheme.BG);
-        footer.setOpaque(true);
-        add(footer, BorderLayout.SOUTH);
+        add(UITheme.footer(), BorderLayout.SOUTH);
     }
 
     private int addRow(JPanel p, GridBagConstraints g, int row, String label, JComponent field) {
         g.gridy = row; g.gridx = 0; g.gridwidth = 2; g.insets = new Insets(10, 0, 0, 0);
         p.add(UITheme.sectionLabel(label), g);
-
         g.gridy = row + 1; g.insets = new Insets(4, 0, 0, 0);
         field.setPreferredSize(new Dimension(Short.MAX_VALUE, 42));
         p.add(field, g);
@@ -95,9 +84,9 @@ public class RegisterFrame extends JFrame {
         String pin     = new String(txtPin.getPassword()).trim();
         String confirm = new String(txtConfirm.getPassword()).trim();
         String type    = switch ((String) cmbType.getSelectedItem()) {
-            case "Savings Account"  -> "SAVINGS";
-            case "Current Account"  -> "CURRENT";
-            default                 -> "MOMO";
+            case "Savings Account" -> "SAVINGS";
+            case "Current Account" -> "CURRENT";
+            default                -> "MOMO";
         };
 
         if (name.isEmpty() || phone.isEmpty()) { err("Name and phone are required."); return; }

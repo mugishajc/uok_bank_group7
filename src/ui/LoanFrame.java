@@ -31,6 +31,7 @@ public class LoanFrame extends JFrame {
         setTitle("Loans — UoK Bank");
         setSize(560, 540);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setIconImage(UITheme.appIcon());
         setLocationRelativeTo(null);
         build();
         setVisible(true);

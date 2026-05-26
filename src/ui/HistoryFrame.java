@@ -24,6 +24,7 @@ public class HistoryFrame extends JFrame {
         setTitle("Transaction History — UoK Bank");
         setSize(760, 520);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setIconImage(UITheme.appIcon());
         setLocationRelativeTo(null);
         build();
         setVisible(true);

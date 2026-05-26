@@ -26,6 +26,7 @@ public class DepositFrame extends JFrame {
         setTitle("Deposit — UoK Bank");
         setSize(420, 400);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setIconImage(UITheme.appIcon());
         setLocationRelativeTo(null);
         setResizable(false);
         build();
