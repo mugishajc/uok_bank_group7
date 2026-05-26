@@ -81,79 +81,35 @@ loans        (id, phone, amount, status, requested_at)
 
 ---
 
-## Local Setup — Clone & Run
+## Getting Started
 
-### Prerequisites
-
-| Tool | Version | Download |
-|------|---------|----------|
-| Git  | any     | [git-scm.com](https://git-scm.com/) |
-| Java | 17 +    | [adoptium.net](https://adoptium.net/) |
-
-### Step 1 — Clone the repository
+> **Requires:** Java 17+ — download from [adoptium.net](https://adoptium.net/)
 
 ```bash
+# 1. Clone
 git clone https://github.com/mugishajc/uok_bank_group7.git
 cd uok_bank_group7/BankingSimulator
+
+# 2. Run  (JAR is pre-built — no compile step needed)
+java -jar UoKBank.jar          # macOS / Linux
+# Windows: double-click UoKBank.bat
+
+# 3. Log in with the default admin
+#    Phone: 0700000000   PIN: 00000
 ```
 
-### Step 2 — Run immediately (no build needed)
+The database is created automatically on first launch — nothing else to install.
 
-The repository contains the compiled `UoKBank.jar`. Launch it directly:
-
+**Optional — run the tests:**
 ```bash
-# macOS / Linux
-java -jar UoKBank.jar
-# or use the provided launcher script
-chmod +x UoKBank.sh && ./UoKBank.sh
-
-# Windows
-UoKBank.bat
+./run_tests.sh        # macOS / Linux  →  OK (69 tests)
 ```
 
-The SQLite database is created automatically at `~/.uokbank/uok_bank.db` on first launch.  
-No installation wizard, no SQL server, no environment variables.
-
-### Step 3 — Verify it works
-
-Log in with the default admin account:
-
-| Field | Value |
-|-------|-------|
-| Phone | `0700000000` |
-| PIN   | `00000` |
-
-### Step 4 — Run the test suite (optional)
-
-```bash
-chmod +x run_tests.sh && ./run_tests.sh
-# Expected: OK (69 tests)
-```
-
-### Step 5 — Rebuild the JAR after code changes (optional)
-
-```bash
-find src -name "*.java" > sources.txt
-mkdir -p out
-javac -cp lib/sqlite-jdbc.jar -d out @sources.txt
-
-mkdir -p fat
-cd fat && jar xf ../lib/sqlite-jdbc.jar && cd ..
-cp -r out/* fat/
-jar cfm UoKBank.jar manifest.txt -C fat .
-
-java -jar UoKBank.jar
-```
-
----
-
-### IntelliJ IDEA (alternative to JAR)
-
-1. **File → Open** → select `BankingSimulator/`
-2. Right-click `src/` → **Mark Directory as → Sources Root**
-3. **File → Project Structure → Modules → Dependencies → + → JARs** → add `lib/sqlite-jdbc.jar`
-4. **Run → Edit Configurations** → Main class: `Main`
-5. Press **Shift+F10**
+**Optional — open in IntelliJ IDEA:**
+1. File → Open → `BankingSimulator/`
+2. Right-click `src/` → Mark Directory as → Sources Root
+3. Project Structure → Dependencies → add `lib/sqlite-jdbc.jar`
+4. Run `Main`
 
 ---
 
