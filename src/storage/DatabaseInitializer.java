@@ -11,7 +11,12 @@ public class DatabaseInitializer {
         seedAdmin();
     }
 
-    private static void createTables() {
+    /** Used by unit tests: creates tables without touching the filesystem or seeding admin. */
+    public static void initForTest() {
+        createTables();
+    }
+
+    static void createTables() {
         try (Connection c = DatabaseConnection.get(); Statement s = c.createStatement()) {
             s.execute(
                 "CREATE TABLE IF NOT EXISTS accounts (" +
@@ -48,20 +53,22 @@ public class DatabaseInitializer {
     }
 
     private static void seedAdmin() {
-        try (Connection c = DatabaseConnection.get()) {
-            ResultSet rs = c.createStatement()
-                .executeQuery("SELECT COUNT(*) FROM accounts WHERE phone='0700000000'");
+        try (Connection c = DatabaseConnection.get();
+             Statement  st = c.createStatement();
+             ResultSet  rs = st.executeQuery(
+                 "SELECT COUNT(*) FROM accounts WHERE phone='0700000000'")) {
             if (rs.next() && rs.getInt(1) == 0) {
-                PreparedStatement ps = c.prepareStatement(
+                try (PreparedStatement ps = c.prepareStatement(
                     "INSERT INTO accounts (phone,full_name,pin,account_type,balance,role)" +
-                    " VALUES (?,?,?,?,?,?)");
-                ps.setString(1, "0700000000");
-                ps.setString(2, "System Admin");
-                ps.setString(3, "00000");
-                ps.setString(4, "CURRENT");
-                ps.setDouble(5, 50_000_000.0);
-                ps.setString(6, "ADMIN");
-                ps.executeUpdate();
+                    " VALUES (?,?,?,?,?,?)")) {
+                    ps.setString(1, "0700000000");
+                    ps.setString(2, "System Admin");
+                    ps.setString(3, "00000");
+                    ps.setString(4, "CURRENT");
+                    ps.setDouble(5, 50_000_000.0);
+                    ps.setString(6, "ADMIN");
+                    ps.executeUpdate();
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

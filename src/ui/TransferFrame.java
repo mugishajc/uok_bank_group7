@@ -134,15 +134,19 @@ public class TransferFrame extends JFrame {
             double amount = Double.parseDouble(txtAmount.getText().trim().replace(",", ""));
             if (amount <= 0) { err("Amount must be greater than zero."); return; }
 
-            Account freshSender = accDao.findByPhone(sender.getPhone());
+            Account freshSender   = accDao.findByPhone(sender.getPhone());
+            Account freshReceiver = accDao.findByPhone(receiverPhone);
+            if (freshSender == null || freshReceiver == null) {
+                err("Account lookup failed. Please try again."); return;
+            }
             if (amount > freshSender.getBalance()) {
                 err("Insufficient balance. Available: FRW " + FRW.format(freshSender.getBalance()));
                 return;
             }
 
-            // Debit sender, credit receiver
-            accDao.updateBalance(sender.getPhone(),   freshSender.getBalance()    - amount);
-            accDao.updateBalance(receiverPhone,       receiver.getBalance()       + amount);
+            // Debit sender, credit receiver (both from freshly-fetched balances)
+            accDao.updateBalance(sender.getPhone(), freshSender.getBalance()   - amount);
+            accDao.updateBalance(receiverPhone,     freshReceiver.getBalance() + amount);
 
             String note = txtNote.getText().trim().isEmpty() ? "MoMo Transfer" : txtNote.getText().trim();
             txnDao.record(sender.getPhone(), receiverPhone, "TRANSFER", amount, note);
