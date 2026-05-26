@@ -55,7 +55,7 @@ public class DashboardFrame extends JFrame {
         navLeft.add(navTitle);
         JLabel navSub = new JLabel("| University of Kigali");
         navSub.setFont(UITheme.F_SMALL);
-        navSub.setForeground(new Color(160, 195, 255));
+        navSub.setForeground(new Color(255, 210, 195));
         navLeft.add(navSub);
         nav.add(navLeft, BorderLayout.WEST);
 
@@ -69,67 +69,69 @@ public class DashboardFrame extends JFrame {
         add(nav, BorderLayout.NORTH);
 
         // ── Balance card ──────────────────────────────────────────────────
-        JPanel balanceCard = new JPanel(null) {
+        JPanel balanceCard = new JPanel(new BorderLayout(0, 0)) {
             @Override protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                // Navy-to-blue gradient
-                g2.setPaint(new GradientPaint(0, 0, UITheme.PRIMARY,
-                                             getWidth(), getHeight(), UITheme.PRIMARY_LIGHT));
+                // UoK maroon → royal blue gradient (bank card look)
+                g2.setPaint(new GradientPaint(0, 0, UITheme.PRIMARY_DARK,
+                                             getWidth(), getHeight(), UITheme.UOK_BLUE));
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 16, 16);
-                // Gold accent stripe at top
+                // Gold top stripe
                 g2.setColor(UITheme.GOLD);
                 g2.fillRoundRect(0, 0, getWidth(), 6, 6, 6);
-                // Decorative gold ring (background)
-                g2.setColor(new Color(255,255,255,15));
-                g2.fillOval(getWidth()-100, -30, 160, 160);
-                g2.fillOval(getWidth()-40, getHeight()-50, 100, 100);
-                // UoK shield (watermark)
-                Graphics2D g2w = (Graphics2D) g2.create();
-                g2w.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.08f));
-                // draw a small shield watermark at right side
-                g2w.dispose();
+                // Subtle highlight circles
+                g2.setColor(new Color(255, 255, 255, 14));
+                g2.fillOval(getWidth() - 110, -35, 170, 170);
+                g2.fillOval(getWidth() - 45,  getHeight() - 55, 110, 110);
             }
         };
         balanceCard.setOpaque(false);
         balanceCard.setPreferredSize(new Dimension(460, 145));
+        balanceCard.setBorder(new EmptyBorder(14, 20, 14, 18));
 
-        // Labels positioned absolutely inside card
+        // Text column (left side of card)
+        JPanel textStack = new JPanel();
+        textStack.setOpaque(false);
+        textStack.setLayout(new BoxLayout(textStack, BoxLayout.Y_AXIS));
+
         JLabel lblBank = new JLabel("UNIVERSITY OF KIGALI BANK");
         lblBank.setFont(new Font("Arial", Font.BOLD, 9));
         lblBank.setForeground(UITheme.GOLD);
-        lblBank.setBounds(20, 16, 280, 14);
-        balanceCard.add(lblBank);
+        textStack.add(lblBank);
+        textStack.add(Box.createVerticalStrut(4));
 
         JLabel lblName = new JLabel(account.getFullName().toUpperCase());
         lblName.setFont(new Font("Arial", Font.BOLD, 15));
         lblName.setForeground(Color.WHITE);
-        lblName.setBounds(20, 34, 340, 20);
-        balanceCard.add(lblName);
+        textStack.add(lblName);
+        textStack.add(Box.createVerticalStrut(3));
 
-        JLabel lblPhoneType = new JLabel(account.getPhone() + "   ·   " + account.getAccountType() + " Account");
+        JLabel lblPhoneType = new JLabel(account.getAccountType() + " Account");
         lblPhoneType.setFont(UITheme.F_SMALL);
-        lblPhoneType.setForeground(new Color(180, 210, 255));
-        lblPhoneType.setBounds(20, 58, 340, 16);
-        balanceCard.add(lblPhoneType);
+        lblPhoneType.setForeground(new Color(255, 205, 190));
+        textStack.add(lblPhoneType);
+        textStack.add(Box.createVerticalGlue());
 
         JLabel lblBalLabel = new JLabel("AVAILABLE BALANCE");
         lblBalLabel.setFont(new Font("Arial", Font.BOLD, 9));
-        lblBalLabel.setForeground(new Color(180, 210, 255));
-        lblBalLabel.setBounds(20, 82, 200, 12);
-        balanceCard.add(lblBalLabel);
+        lblBalLabel.setForeground(new Color(255, 205, 190));
+        textStack.add(lblBalLabel);
+        textStack.add(Box.createVerticalStrut(2));
 
         lblBalance = new JLabel("FRW  " + FRW.format(account.getBalance()));
         lblBalance.setFont(new Font("Arial", Font.BOLD, 24));
         lblBalance.setForeground(UITheme.GOLD_BRIGHT);
-        lblBalance.setBounds(20, 96, 360, 32);
-        balanceCard.add(lblBalance);
+        textStack.add(lblBalance);
 
-        // Mini UoK badge on card
-        JPanel miniLogo = UITheme.logoBadge(38);
-        miniLogo.setBounds(408, 52, 38, 38);
-        balanceCard.add(miniLogo);
+        balanceCard.add(textStack, BorderLayout.CENTER);
+
+        // Mini UoK badge (right side of card)
+        JPanel logoWrapper = new JPanel(new GridBagLayout());
+        logoWrapper.setOpaque(false);
+        logoWrapper.add(UITheme.logoBadge(42));
+        balanceCard.add(logoWrapper, BorderLayout.EAST);
 
         JPanel cardWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 14));
         cardWrapper.setBackground(UITheme.BG);
