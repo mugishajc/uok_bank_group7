@@ -18,7 +18,7 @@ public class LoginFrame extends JFrame {
         setSize(460, 620);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setIconImage(UITheme.appIcon());
         build();
         setVisible(true);

@@ -23,7 +23,7 @@ public class DashboardFrame extends JFrame {
         setSize(520, 620);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setIconImage(UITheme.appIcon());
         build();
         setVisible(true);
@@ -88,7 +88,7 @@ public class DashboardFrame extends JFrame {
             }
         };
         balanceCard.setOpaque(false);
-        balanceCard.setPreferredSize(new Dimension(460, 145));
+        balanceCard.setPreferredSize(new Dimension(0, 160));
         balanceCard.setBorder(new EmptyBorder(14, 20, 14, 18));
 
         // Text column (left side of card)
@@ -133,11 +133,6 @@ public class DashboardFrame extends JFrame {
         logoWrapper.add(UITheme.logoBadge(42));
         balanceCard.add(logoWrapper, BorderLayout.EAST);
 
-        JPanel cardWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 14));
-        cardWrapper.setBackground(UITheme.BG);
-        cardWrapper.add(balanceCard);
-        add(cardWrapper, BorderLayout.CENTER);
-
         // ── Action grid ───────────────────────────────────────────────────
         JPanel grid = new JPanel(new GridLayout(2, 3, 12, 12));
         grid.setBackground(UITheme.BG);
@@ -150,11 +145,25 @@ public class DashboardFrame extends JFrame {
         grid.add(tile("Loan",     "Request credit",  UITheme.WARNING,     e -> new LoanFrame(account, this)));
         grid.add(tile("Agent",    "Cash in / out",   UITheme.TEAL,        e -> new AgentFrame(account, this)));
 
-        JPanel bottom = new JPanel(new BorderLayout());
-        bottom.setBackground(UITheme.BG);
-        bottom.add(grid, BorderLayout.CENTER);
-        bottom.add(UITheme.footer(), BorderLayout.SOUTH);
-        add(bottom, BorderLayout.SOUTH);
+        // Center: balance card + tile grid stacked, grid expands to fill
+        JPanel center = new JPanel(new GridBagLayout());
+        center.setBackground(UITheme.BG);
+        GridBagConstraints gc = new GridBagConstraints();
+
+        gc.gridx = 0; gc.gridy = 0;
+        gc.fill = GridBagConstraints.HORIZONTAL;
+        gc.weightx = 1.0; gc.weighty = 0.0;
+        gc.insets = new Insets(14, 20, 0, 20);
+        center.add(balanceCard, gc);
+
+        gc.gridy = 1;
+        gc.fill = GridBagConstraints.BOTH;
+        gc.weighty = 1.0;
+        gc.insets = new Insets(12, 0, 0, 0);
+        center.add(grid, gc);
+
+        add(center, BorderLayout.CENTER);
+        add(UITheme.footer(), BorderLayout.SOUTH);
     }
 
     public void refreshBalance() {

@@ -33,6 +33,7 @@ public class LoanFrame extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setIconImage(UITheme.appIcon());
         setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         build();
         setVisible(true);
     }

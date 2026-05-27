@@ -31,6 +31,7 @@ public class AdminFrame extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setIconImage(UITheme.appIcon());
         setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         build();
         setVisible(true);
     }

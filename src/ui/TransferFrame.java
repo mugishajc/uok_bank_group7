@@ -30,7 +30,7 @@ public class TransferFrame extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setIconImage(UITheme.appIcon());
         setLocationRelativeTo(null);
-        setResizable(false);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         build();
         setVisible(true);
     }

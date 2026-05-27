@@ -18,7 +18,7 @@ public class RegisterFrame extends JFrame {
         setSize(480, 600);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setIconImage(UITheme.appIcon());
         build();
         setVisible(true);
