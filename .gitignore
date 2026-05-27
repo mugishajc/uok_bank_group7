@@ -8,3 +8,4 @@ manifest.txt
 .idea/
 *.iml
 .claude/
+dist/
