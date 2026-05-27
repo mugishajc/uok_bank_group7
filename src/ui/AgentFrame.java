@@ -122,6 +122,11 @@ public class AgentFrame extends JFrame {
     private void lookupCustomer() {
         String phone = txtCustomerPhone.getText().trim();
         if (phone.isEmpty()) { lblCustomerName.setText("Enter a phone number."); return; }
+        if (phone.equals(agent.getPhone())) {
+            lblCustomerName.setForeground(UITheme.DANGER);
+            lblCustomerName.setText("Cannot perform agent operations on your own account.");
+            return;
+        }
         Account c = accDao.findByPhone(phone);
         if (c == null) {
             lblCustomerName.setForeground(UITheme.DANGER);
@@ -194,6 +199,7 @@ public class AgentFrame extends JFrame {
 
     private Account getCustomer() {
         String phone = txtCustomerPhone.getText().trim();
+        if (phone.equals(agent.getPhone())) { err("Cannot perform agent operations on your own account."); return null; }
         Account c = accDao.findByPhone(phone);
         if (c == null)    { err("Customer account not found."); return null; }
         if (c.isFrozen()) { err("Customer account is frozen."); return null; }
