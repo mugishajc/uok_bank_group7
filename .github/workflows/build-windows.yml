@@ -1,0 +1,62 @@
+name: Build Windows EXE Installer
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Build Windows EXE with jpackage
+        working-directory: BankingSimulator
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          jpackage `
+            --input . `
+            --name UoKBank `
+            --main-jar UoKBank.jar `
+            --main-class Main `
+            --type exe `
+            --app-version 1.0 `
+            --vendor "University of Kigali Group 7" `
+            --description "UoK Bank Banking and Mobile Money Simulator" `
+            --win-dir-chooser `
+            --win-menu `
+            --win-shortcut `
+            --dest dist
+
+      - name: Publish GitHub Release with EXE
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0
+          name: "UoK Bank v1.0 — Windows Installer"
+          body: |
+            ## UoK Bank — Windows Installer
+
+            **No Java required** — everything is bundled inside.
+
+            ### How to install
+            1. Download **UoKBank-1.0.exe** below
+            2. Double-click it to install
+            3. Launch from the Start Menu or Desktop shortcut
+
+            ---
+            University of Kigali · MSc.IT · Advanced Programming with Java · Group 7 · 2026
+          files: BankingSimulator/dist/UoKBank-1.0.exe
+          make_latest: true
