@@ -29,11 +29,12 @@ public class LoanFrame extends JFrame {
         this.account = account;
         this.dash    = dash;
         setTitle("Loans — UoK Bank");
-        setSize(560, 540);
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize((int)(screen.width * 0.78), (int)(screen.height * 0.78));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setIconImage(UITheme.appIcon());
         setLocationRelativeTo(null);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setResizable(true);
         build();
         setVisible(true);
     }

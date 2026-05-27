@@ -24,11 +24,12 @@ public class DepositFrame extends JFrame {
         this.account = account;
         this.dash    = dash;
         setTitle("Deposit — UoK Bank");
-        setSize(420, 400);
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize((int)(screen.width * 0.55), (int)(screen.height * 0.70));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setIconImage(UITheme.appIcon());
         setLocationRelativeTo(null);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setResizable(true);
         build();
         setVisible(true);
     }
