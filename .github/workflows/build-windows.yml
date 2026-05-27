@@ -45,6 +45,7 @@ jobs:
         with:
           tag_name: v1.0
           name: "UoK Bank v1.0 — Windows Installer"
+          overwrite: true
           body: |
             ## UoK Bank — Windows Installer
 

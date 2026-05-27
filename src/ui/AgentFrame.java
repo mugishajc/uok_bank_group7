@@ -141,9 +141,19 @@ public class AgentFrame extends JFrame {
         Account customer = getCustomer(); if (customer == null) return;
         double amount = getAmount();      if (amount <= 0) return;
 
-        accDao.updateBalance(customer.getPhone(), customer.getBalance() + amount);
-        txnDao.record(agent.getPhone(), customer.getPhone(), "AGENT_CASH_IN", amount,
-            "Cash-in via agent " + agent.getFullName());
+        // Fresh balances for both parties
+        Account freshAgent    = accDao.findByPhone(agent.getPhone());
+        Account freshCustomer = accDao.findByPhone(customer.getPhone());
+
+        if (freshAgent.getBalance() < amount) {
+            err("Insufficient agent balance to fund this cash-in.\nAgent available: FRW " + FRW.format(freshAgent.getBalance()));
+            return;
+        }
+
+        // Agent gives float → customer receives e-money
+        accDao.updateBalance(agent.getPhone(),    freshAgent.getBalance()    - amount);
+        accDao.updateBalance(customer.getPhone(), freshCustomer.getBalance() + amount);
+        txnDao.record(agent.getPhone(), customer.getPhone(), "AGENT_CASH_IN", amount, "Cash-in via agent");
 
         JOptionPane.showMessageDialog(this,
             "Cash-in of FRW " + FRW.format(amount) + " to " + customer.getFullName() + " successful.",
@@ -156,14 +166,19 @@ public class AgentFrame extends JFrame {
         Account customer = getCustomer(); if (customer == null) return;
         double amount = getAmount();      if (amount <= 0) return;
 
-        if (amount > customer.getBalance()) {
-            err("Customer has insufficient balance. Available: FRW " + FRW.format(customer.getBalance()));
+        // Fresh balances for both parties
+        Account freshAgent    = accDao.findByPhone(agent.getPhone());
+        Account freshCustomer = accDao.findByPhone(customer.getPhone());
+
+        if (freshCustomer.getBalance() < amount) {
+            err("Customer has insufficient balance. Available: FRW " + FRW.format(freshCustomer.getBalance()));
             return;
         }
 
-        accDao.updateBalance(customer.getPhone(), customer.getBalance() - amount);
-        txnDao.record(customer.getPhone(), agent.getPhone(), "AGENT_CASH_OUT", amount,
-            "Cash-out via agent " + agent.getFullName());
+        // Customer gives e-money → agent receives float
+        accDao.updateBalance(customer.getPhone(), freshCustomer.getBalance() - amount);
+        accDao.updateBalance(agent.getPhone(),    freshAgent.getBalance()    + amount);
+        txnDao.record(customer.getPhone(), agent.getPhone(), "AGENT_CASH_OUT", amount, "Cash-out via agent");
 
         JOptionPane.showMessageDialog(this,
             "Cash-out of FRW " + FRW.format(amount) + " from " + customer.getFullName() + " successful.",
