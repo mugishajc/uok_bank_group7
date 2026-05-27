@@ -23,7 +23,6 @@ jobs:
           java-version: '17'
 
       - name: Build Windows EXE with jpackage
-        working-directory: BankingSimulator
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path dist | Out-Null
@@ -58,5 +57,5 @@ jobs:
 
             ---
             University of Kigali · MSc.IT · Advanced Programming with Java · Group 7 · 2026
-          files: BankingSimulator/dist/UoKBank-1.0.exe
+          files: dist/UoKBank-1.0.exe
           make_latest: true
