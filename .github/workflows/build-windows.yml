@@ -32,7 +32,7 @@ jobs:
             --main-jar UoKBank.jar `
             --main-class Main `
             --type exe `
-            --app-version 1.0.3 `
+            --app-version 1.0.4 `
             --vendor "University of Kigali Group 7" `
             --description "UoK Bank Banking and Mobile Money Simulator" `
             --icon icon.ico `
@@ -44,25 +44,25 @@ jobs:
       - name: Publish GitHub Release with EXE
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.3
-          name: "UoK Bank v1.0.3 — Windows Installer (Agent Balance Fix)"
+          tag_name: v1.0.4
+          name: "UoK Bank v1.0.4 — Windows Installer (Agent Balance Fix)"
           overwrite: true
           body: |
-            ## UoK Bank v1.0.3 — Windows Installer
+            ## UoK Bank v1.0.4 — Windows Installer
 
             **No Java required** — everything is bundled inside.
 
-            ### What's fixed in v1.0.3
+            ### What's fixed in v1.0.4
             - Agent Cash-In now correctly **debits the agent** and credits the customer
             - Agent Cash-Out now correctly **credits the agent** and debits the customer
             - Agent balance check added before Cash-In (prevents overdraft)
 
             ### How to install
-            1. Download **UoKBank-1.0.3.exe** below
+            1. Download **UoKBank-1.0.4.exe** below
             2. Double-click it to install
             3. Launch from the Start Menu or Desktop shortcut
 
             ---
             University of Kigali · MSc.IT · Advanced Programming with Java · Group 7 · 2026
-          files: dist/UoKBank-1.0.3.exe
+          files: dist/UoKBank-1.0.4.exe
           make_latest: true

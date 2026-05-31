@@ -15,7 +15,7 @@ public class RegisterFrame extends JFrame {
 
     public RegisterFrame() {
         setTitle("UoK Bank — Open Account");
-        setSize(480, 600);
+        setSize(520, 700);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -25,57 +25,104 @@ public class RegisterFrame extends JFrame {
     }
 
     private void build() {
-        getContentPane().setBackground(UITheme.BG);
-        setLayout(new BorderLayout());
+        // Full gradient background — same as LoginFrame
+        JPanel root = new JPanel(new GridBagLayout()) {
+            @Override protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setPaint(new GradientPaint(0, 0, UITheme.PRIMARY_DARK,
+                                             getWidth(), getHeight(), UITheme.PRIMARY));
+                g2.fillRect(0, 0, getWidth(), getHeight());
+                g2.setColor(new Color(255, 255, 255, 12));
+                g2.fillOval(-60, -60, 220, 220);
+                g2.fillOval(getWidth() - 120, getHeight() - 120, 240, 240);
+            }
+        };
+        setContentPane(root);
 
-        add(UITheme.pageHeader("Open New Account", "University of Kigali Banking Simulator"),
-            BorderLayout.NORTH);
+        // ── White card ────────────────────────────────────────────────────
+        JPanel card = new JPanel();
+        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+        card.setBackground(Color.WHITE);
+        card.setBorder(new EmptyBorder(24, 40, 24, 40));
+        card.setPreferredSize(new Dimension(420, 620));
 
-        JPanel form = new JPanel(new GridBagLayout());
-        form.setBackground(UITheme.CARD);
-        form.setBorder(new EmptyBorder(28, 36, 28, 36));
+        // Logo + title
+        JPanel logoRow = centred();
+        logoRow.add(UITheme.logoBadge(60));
+        card.add(logoRow);
+        card.add(Box.createVerticalStrut(10));
 
-        GridBagConstraints g = new GridBagConstraints();
-        g.fill    = GridBagConstraints.HORIZONTAL;
-        g.insets  = new Insets(6, 0, 6, 0);
-        g.weightx = 1.0;
+        JLabel lblApp = new JLabel("Open New Account");
+        lblApp.setFont(new Font("Arial", Font.BOLD, 22));
+        lblApp.setForeground(UITheme.PRIMARY);
+        lblApp.setAlignmentX(Component.CENTER_ALIGNMENT);
+        card.add(lblApp);
 
-        int row = 0;
-        row = addRow(form, g, row, "FULL NAME",      txtName    = UITheme.field());
-        row = addRow(form, g, row, "PHONE NUMBER",   txtPhone   = UITheme.field());
-        cmbType = UITheme.combo("MoMo Wallet", "Savings Account", "Current Account");
-        row = addRow(form, g, row, "ACCOUNT TYPE",   cmbType);
-        row = addRow(form, g, row, "PIN (5 digits)", txtPin     = UITheme.pinField());
-        row = addRow(form, g, row, "CONFIRM PIN",    txtConfirm = UITheme.pinField());
+        JLabel lblSub = new JLabel("University of Kigali Banking Simulator");
+        lblSub.setFont(UITheme.F_MICRO);
+        lblSub.setForeground(UITheme.TEXT_MUTED);
+        lblSub.setAlignmentX(Component.CENTER_ALIGNMENT);
+        card.add(lblSub);
+        card.add(Box.createVerticalStrut(16));
+        card.add(UITheme.divider());
+        card.add(Box.createVerticalStrut(12));
 
-        // Primary action = UoK navy blue
-        g.gridy = row; g.gridx = 0; g.gridwidth = 2; g.insets = new Insets(18, 0, 8, 0);
+        // ── Form fields ───────────────────────────────────────────────────
+        txtName    = UITheme.field();
+        txtPhone   = UITheme.field();
+        cmbType    = UITheme.combo("MoMo Wallet", "Savings Account", "Current Account");
+        txtPin     = UITheme.pinField();
+        txtConfirm = UITheme.pinField();
+
+        addField(card, "FULL NAME",      txtName);
+        addField(card, "PHONE NUMBER",   txtPhone);
+        addField(card, "ACCOUNT TYPE",   cmbType);
+        addField(card, "PIN (5 digits)", txtPin);
+        addField(card, "CONFIRM PIN",    txtConfirm);
+
+        card.add(Box.createVerticalStrut(18));
+
+        // ── Buttons ───────────────────────────────────────────────────────
         JButton btnCreate = UITheme.primaryBtn("Create Account");
-        btnCreate.setPreferredSize(new Dimension(Short.MAX_VALUE, 44));
+        btnCreate.setMaximumSize(new Dimension(Integer.MAX_VALUE, 46));
+        btnCreate.setAlignmentX(Component.LEFT_ALIGNMENT);
         btnCreate.addActionListener(e -> register());
-        form.add(btnCreate, g);
+        card.add(btnCreate);
+        card.add(Box.createVerticalStrut(10));
 
-        g.gridy = row + 1; g.insets = new Insets(0, 0, 0, 0);
         JButton btnBack = UITheme.grayBtn("Back to Login");
-        btnBack.setPreferredSize(new Dimension(Short.MAX_VALUE, 40));
-        btnBack.addActionListener(e -> { dispose(); new LoginFrame(); });
-        form.add(btnBack, g);
+        btnBack.setMaximumSize(new Dimension(Integer.MAX_VALUE, 42));
+        btnBack.setAlignmentX(Component.LEFT_ALIGNMENT);
+        btnBack.addActionListener(e -> goBack());
+        card.add(btnBack);
 
-        JScrollPane scroll = new JScrollPane(form);
-        scroll.setBorder(null);
-        scroll.getViewport().setBackground(UITheme.CARD);
-        add(scroll, BorderLayout.CENTER);
-
-        add(UITheme.footer(), BorderLayout.SOUTH);
+        root.add(card);
     }
 
-    private int addRow(JPanel p, GridBagConstraints g, int row, String label, JComponent field) {
-        g.gridy = row; g.gridx = 0; g.gridwidth = 2; g.insets = new Insets(10, 0, 0, 0);
-        p.add(UITheme.sectionLabel(label), g);
-        g.gridy = row + 1; g.insets = new Insets(4, 0, 0, 0);
-        field.setPreferredSize(new Dimension(Short.MAX_VALUE, 42));
-        p.add(field, g);
-        return row + 2;
+    private void addField(JPanel card, String label, JComponent field) {
+        JLabel lbl = UITheme.sectionLabel(label);
+        lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
+        card.add(lbl);
+        card.add(Box.createVerticalStrut(4));
+        field.setMaximumSize(new Dimension(Integer.MAX_VALUE, 42));
+        field.setAlignmentX(Component.LEFT_ALIGNMENT);
+        card.add(field);
+        card.add(Box.createVerticalStrut(10));
+    }
+
+    private JPanel centred() {
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        p.setOpaque(false);
+        p.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
+        return p;
+    }
+
+    private void goBack() {
+        setVisible(false);
+        dispose();
+        SwingUtilities.invokeLater(LoginFrame::new);
     }
 
     private void register() {
@@ -89,17 +136,16 @@ public class RegisterFrame extends JFrame {
             default                -> "MOMO";
         };
 
-        if (name.isEmpty() || phone.isEmpty()) { err("Name and phone are required."); return; }
-        if (pin.length() != 5)                 { err("PIN must be exactly 5 digits."); return; }
-        if (!pin.equals(confirm))              { err("PINs do not match."); return; }
+        if (name.isEmpty() || phone.isEmpty()) { err("Name and phone are required.");          return; }
+        if (pin.length() != 5)                 { err("PIN must be exactly 5 digits.");         return; }
+        if (!pin.equals(confirm))              { err("PINs do not match.");                    return; }
         if (!phone.matches("07\\d{8}"))        { err("Enter a valid Rwandan phone (07XXXXXXXX)."); return; }
 
         if (dao.create(phone, name, pin, type)) {
             JOptionPane.showMessageDialog(this,
-                "Account created successfully!\nYou can now log in.",
+                "Account created!\nYou can now log in.",
                 "Account Opened", JOptionPane.INFORMATION_MESSAGE);
-            dispose();
-            new LoginFrame();
+            goBack();
         } else {
             err("This phone number is already registered.");
         }
