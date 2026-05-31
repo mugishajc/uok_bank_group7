@@ -46,7 +46,8 @@ public class RegisterFrame extends JFrame {
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBackground(Color.WHITE);
         card.setBorder(new EmptyBorder(24, 40, 24, 40));
-        card.setPreferredSize(new Dimension(420, 620));
+        card.setPreferredSize(new Dimension(400, 640));
+        card.setMaximumSize(new Dimension(400, 800));
 
         // Logo + title
         JPanel logoRow = centred();
@@ -86,14 +87,14 @@ public class RegisterFrame extends JFrame {
 
         // ── Buttons ───────────────────────────────────────────────────────
         JButton btnCreate = UITheme.primaryBtn("Create Account");
-        btnCreate.setMaximumSize(new Dimension(Integer.MAX_VALUE, 46));
+        btnCreate.setMaximumSize(new Dimension(Short.MAX_VALUE, 46));
         btnCreate.setAlignmentX(Component.LEFT_ALIGNMENT);
         btnCreate.addActionListener(e -> register());
         card.add(btnCreate);
         card.add(Box.createVerticalStrut(10));
 
         JButton btnBack = UITheme.grayBtn("Back to Login");
-        btnBack.setMaximumSize(new Dimension(Integer.MAX_VALUE, 42));
+        btnBack.setMaximumSize(new Dimension(Short.MAX_VALUE, 42));
         btnBack.setAlignmentX(Component.LEFT_ALIGNMENT);
         btnBack.addActionListener(e -> goBack());
         card.add(btnBack);
@@ -106,7 +107,7 @@ public class RegisterFrame extends JFrame {
         lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
         card.add(lbl);
         card.add(Box.createVerticalStrut(4));
-        field.setMaximumSize(new Dimension(Integer.MAX_VALUE, 42));
+        field.setMaximumSize(new Dimension(Short.MAX_VALUE, 42));
         field.setAlignmentX(Component.LEFT_ALIGNMENT);
         card.add(field);
         card.add(Box.createVerticalStrut(10));
